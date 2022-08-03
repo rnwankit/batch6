@@ -1,0 +1,40 @@
+{
+  "medicines": [
+    {
+      "id": 2,
+      "name": "ABC",
+      "price": 500,
+      "quantity": 1000,
+      "expiry": 2025
+    },
+    {
+      "id": 824,
+      "name": "DemoAxios1",
+      "price": "50",
+      "quantity": "500",
+      "expiry": "2025"
+    },
+    {
+      "id": 134,
+      "name": "AXIOSDEMO",
+      "price": "1",
+      "quantity": "2",
+      "expiry": "3"
+    },
+    {
+      "id": 30,
+      "title": "demo",
+      "author": "abcd"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
