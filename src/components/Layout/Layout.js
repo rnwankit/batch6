@@ -21,6 +21,7 @@ import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import PersonIcon from '@mui/icons-material/Person';
 import { NavLink } from 'react-router-dom';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import UseMemoExample from '../../containers/Examples/UseMemoExample';
 
 const drawerWidth = 240;
 
@@ -104,7 +105,10 @@ export default function Layout({children}) {
   const listItemsData = [
     {lable: "Medicines", to: '/medicines', icon: <MedicalServicesIcon />},
     {lable: "Patients", to: '/patients', icon: <PersonIcon />},
-    {lable: "Counter", to: '/counter', icon: <HourglassBottomIcon />}
+    {lable: "Counter", to: '/counter', icon: <HourglassBottomIcon />},
+    {lable: "Promises Example", to: '/PromisesExample', icon: <HourglassBottomIcon />},
+    {lable: "UseMemo Example", to: '/UseMemoExample', icon: <HourglassBottomIcon />},
+    {lable: "UseCallback Example", to: '/UseCallbackExample', icon: <HourglassBottomIcon />}
   ]
 
   return (
