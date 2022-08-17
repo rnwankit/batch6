@@ -1,9 +1,9 @@
-import { ThemeProvider } from "@mui/system";
 import { Provider } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import Layout from "./components/Layout/Layout";
 import Counter from "./containers/Counter/Counter";
+import Doctors from "./containers/Doctors/Doctors";
 import PromisesExample from "./containers/Examples/PromisesExample";
 import UseCallbackExample from "./containers/Examples/UseCallbackExample";
 import UseMemoExample from "./containers/Examples/UseMemoExample";
@@ -16,22 +16,21 @@ function App() {
 
   return (
     <>
-      <ThemeProvider>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <Layout>
-              <Switch>
-                <Route path={"/medicines"} exact component={Medicines} />
-                <Route path={"/patients"} exact component={Patients} />
-                <Route path={"/counter"} exact component={Counter} />
-                <Route path={"/PromisesExample"} exact component={PromisesExample} />
-                <Route path={"/UseMemoExample"} exact component={UseMemoExample} />
-                <Route path={"/UseCallbackExample"} exact component={UseCallbackExample} />
-              </Switch>
-            </Layout>
-          </PersistGate>
-        </Provider>
-      </ThemeProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Layout>
+            <Switch>
+              <Route path={"/medicines"} exact component={Medicines} />
+              <Route path={"/doctors"} exact component={Doctors} />
+              <Route path={"/patients"} exact component={Patients} />
+              <Route path={"/counter"} exact component={Counter} />
+              <Route path={"/PromisesExample"} exact component={PromisesExample} />
+              <Route path={"/UseMemoExample"} exact component={UseMemoExample} />
+              <Route path={"/UseCallbackExample"} exact component={UseCallbackExample} />
+            </Switch>
+          </Layout>
+        </PersistGate>
+      </Provider>
     </>
   );
 }
