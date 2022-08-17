@@ -44,20 +44,13 @@ function Doctors(props) {
 
     let schema = yup.object().shape({
         name: yup.string().required("Please enter name"),
-        aptaptprice: yup.number().required("Please enter name").positive().integer(),
+        aptprice: yup.number().required("Please enter appointment price").positive().integer(),
         degree: yup.string().required("Please enter degree"),
         description: yup.string().required("Please enter description")
     });
 
     const handleInsert = (values) => {
-        let id = Math.floor(Math.random() * 1000);
-
-        let data = {
-            id: id,
-            ...values
-        }
-
-        dispatch(addDoctor(data))
+        dispatch(addDoctor(values))
 
         // const localData = JSON.parse(localStorage.getItem("doctors"));
 
@@ -134,7 +127,7 @@ function Doctors(props) {
     }
 
     const columns = [
-        { field: 'name', headerName: 'Name', width: 130 },
+        { field: 'name', headerName: 'id', width: 130 },
         { field: 'aptprice', headerName: 'Appointment Price', width: 130 },
         { field: 'degree', headerName: 'Degree', width: 130 },
         { field: 'description', headerName: 'Description', width: 130 },
@@ -144,7 +137,7 @@ function Doctors(props) {
             width: 130,
             renderCell: (params) => (
                 <>
-                    <IconButton aria-label="delete" onClick={() => { handleDClickOpen(); setDid(params.id) }}>
+                    <IconButton aria-label="delete" onClick={() => { handleDClickOpen(); setDid(params.row.did) }}>
                         <DeleteIcon />
                     </IconButton>
                     <IconButton aria-label="edit" onClick={() => handleEdit(params)}>
@@ -172,7 +165,7 @@ function Doctors(props) {
 
     const { handleBlur, handleChange, handleSubmit, errors, touched, values } = formikObj
 
-    console.log(data);
+    console.log(errors);
 
     const handleSearch = (val) => {
 
@@ -219,6 +212,7 @@ function Doctors(props) {
 
                             <div style={{ height: 400, width: '100%' }}>
                                 <DataGrid
+                                    getRowId={(row) => row.did}
                                     rows={doctors.doctors}
                                     columns={columns}
                                     pageSize={5}

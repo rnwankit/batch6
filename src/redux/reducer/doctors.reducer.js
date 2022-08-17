@@ -27,7 +27,7 @@ export const doctorsReducer = (state = initVal, action) => {
             return {
                 ...state,
                 isLoading: false,
-                doctors: state.doctors.filter((l) => l.id !== action.payload),
+                doctors: state.doctors.filter((l) => l.did !== action.payload),
                 error: ''
             }
         case ActionTypes.UPDATE_DOCTORS:
@@ -35,7 +35,7 @@ export const doctorsReducer = (state = initVal, action) => {
                 ...state,
                 isLoading: false,
                 doctors: state.doctors.map((m) => {
-                    if (m.id === action.payload.id) {
+                    if (m.did === action.payload.did) {
                         return action.payload
                     } else {
                         return m;
