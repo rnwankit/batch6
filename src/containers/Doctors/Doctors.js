@@ -46,20 +46,13 @@ function Doctors(props) {
         name: yup.string().required("Please enter name"),
         aptprice: yup.number().required("Please enter appointment price").positive().integer(),
         degree: yup.string().required("Please enter degree"),
-        description: yup.string().required("Please enter description")
+        description: yup.string().required("Please enter description"),
+        file: yup.mixed().required("Please enter image")
     });
 
     const handleInsert = (values) => {
+        console.log(values);
         dispatch(addDoctor(values))
-
-        // const localData = JSON.parse(localStorage.getItem("doctors"));
-
-        // if (localData === null) {
-        //     localStorage.setItem("doctors", JSON.stringify([data]));
-        // } else {
-        //     localData.push(data)
-        //     localStorage.setItem("doctors", JSON.stringify(localData))
-        // }
 
         loadData();
         handleClose();
@@ -67,18 +60,6 @@ function Doctors(props) {
     }
 
     const handeUpdateData = (values) => {
-        // let localData = JSON.parse(localStorage.getItem("doctors"));
-
-        // let uData = localData.map((l) => {
-        //     if (l.id === values.id) {
-        //         return values
-        //     } else {
-        //         return l
-        //     }
-        // });
-
-        // localStorage.setItem("doctors", JSON.stringify(uData))
-
         dispatch(updateDoctors(values))
 
         handleClose();
@@ -92,7 +73,8 @@ function Doctors(props) {
             name: '',
             aptprice: '',
             degree: '',
-            description: ''
+            description: '',
+            file: ''
         },
         validationSchema: schema,
         onSubmit: values => {
@@ -105,12 +87,6 @@ function Doctors(props) {
     });
 
     const handleDelete = () => {
-        // const localData = JSON.parse(localStorage.getItem("doctors"));
-
-        // let fData = localData.filter((l) => l.id !== did);
-
-        // localStorage.setItem("doctors", JSON.stringify(fData));
-
         dispatch(deleteDoctors(did))
 
         handleClose();
@@ -131,6 +107,12 @@ function Doctors(props) {
         { field: 'aptprice', headerName: 'Appointment Price', width: 130 },
         { field: 'degree', headerName: 'Degree', width: 130 },
         { field: 'description', headerName: 'Description', width: 130 },
+        {
+            filed: 'url', headerName: 'Image',
+            renderCell: (params) => (
+                <img src={params.row.url} width={50} height={50} />
+            )
+        },
         {
             field: 'action',
             headerName: 'Action',
@@ -163,7 +145,7 @@ function Doctors(props) {
         },
         [])
 
-    const { handleBlur, handleChange, handleSubmit, errors, touched, values } = formikObj
+    const { handleBlur, handleChange, handleSubmit, errors, touched, values, setFieldValue } = formikObj
 
     console.log(errors);
 
@@ -298,6 +280,17 @@ function Doctors(props) {
                                             />
                                             {errors.description && touched.description ? <p>{errors.description}</p> : ''}
 
+                                            <input
+                                                type={"file"}
+                                                onBlur={handleBlur}
+                                                name="file"
+                                                id="file"
+                                                accept="image/*"
+                                                onChange={(event) => {
+                                                    setFieldValue("file", event.target.files[0]);
+                                                }}
+                                            />
+                                            {errors.file && touched.file ? <p>{errors.file}</p> : ''}
                                             <DialogActions>
                                                 <Button onClick={handleClose}>Cancel</Button>
                                                 {

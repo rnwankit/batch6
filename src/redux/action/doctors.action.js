@@ -1,6 +1,7 @@
 import * as ActionTypes from '../ActionTypes';
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { db } from '../../firebase';
+import { db, storage } from '../../firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 export const getDoctors = () => async (dispatch) => {
     try {
@@ -25,11 +26,26 @@ export const addDoctor = (data) => async (dispatch) => {
     try {
         dispatch(loadingDoctors());
 
-        const docRef = await addDoc(collection(db, "doctors"), data);
+        const imagesRef = ref(storage, 'doctors/' + data.file.name);
 
-        dispatch({ type: ActionTypes.ADD_DOCTORS, payload: { did: docRef.id, ...data } })
-        console.log("Document written with ID: ", docRef.id);
-
+        await uploadBytes(imagesRef, data.file).then((snapshot) => {
+            getDownloadURL(snapshot.ref)
+                .then(async (url) => {
+                    const docRef = await addDoc(collection(db, "doctors"), {
+                        name: data.name,
+                        aptprice: data.aptprice,
+                        degree: data.degree,
+                        description: data.description,
+                        url: url
+                    });
+            
+                    dispatch({ type: ActionTypes.ADD_DOCTORS, payload: { did: docRef.id, name: data.name,
+                        aptprice: data.aptprice,
+                        degree: data.degree,
+                        description: data.description,
+                        url: url } })
+                })
+        });
     } catch (error) {
         dispatch(errorDoctors(error.message));
     }
@@ -46,7 +62,7 @@ export const deleteDoctors = (docid) => async (dispatch) => {
     }
 }
 
-export const updateDoctors = (data) => async(dispatch) => {
+export const updateDoctors = (data) => async (dispatch) => {
     try {
         const doctorRef = doc(db, "doctors", data.did);
 
@@ -57,7 +73,7 @@ export const updateDoctors = (data) => async(dispatch) => {
             description: data.description
         });
 
-        dispatch({type: ActionTypes.UPDATE_DOCTORS, payload: data})
+        dispatch({ type: ActionTypes.UPDATE_DOCTORS, payload: data })
     } catch (error) {
         dispatch(errorDoctors(error.message));
     }
