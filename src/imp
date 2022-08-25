@@ -1,0 +1,103 @@
+RestApp
+
+Create project structure
+Added to git project management
+
+
+import React from 'react';
+import { Route } from 'react-router-dom';
+import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
+import { isLogin } from '../utils';
+
+function PublicRoute({Component,restricted=false, ...rest}) {
+    console.log(() => isLogin, restricted);
+    return (
+        <Route {...rest} render={props => (
+            isLogin && restricted ?
+                <Redirect to="/list_appointment" />
+                :
+                <Component {...props} />
+        )}/>
+    );
+}
+
+export default PublicRoute;
+
+import React from 'react';
+import { Route } from 'react-router-dom';
+import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
+import { isLogin } from '../utils';
+
+function PrivateRoute({Component, ...rest}) {
+    return (
+        <Route {...rest} render={props => (
+            isLogin ?
+                <Redirect to="/dashboard" />
+            :
+                <Component {...props} />
+        )}  
+
+        />
+    );
+}
+
+1.
+Write a program to read the values a, b and c and display x, where
+x = a / b –c.
+Test the program for the following values:
+(a) a = 250, b = 85, c = 25
+(b) a = 300, b = 70, c = 70
+
+
+2. Write a function to read a matrix of size m*n from the keyboard.
+
+
+3. 
+Define a class to represent a bank account. Include the following members:
+Data members:
+Name of the depositor.
+Account number.
+Type of account.
+Balance amount in the account.
+Member functions:
+To assign initial values.
+To deposit an amount.
+To withdraw an amount after checking the balance.
+To display the name and balance.
+Write a main program to test the program.
+
+4.
+WAP to create an Abstract Class Shape. Make two sub-class Circle and Triangle which implements a method from Shape class called getArea().
+
+5.
+WAP to create a class which illustrate the concept of handling all types of exceptions using general exception.
+
+export default PrivateRoute;
+
+[
+    {
+        id: 101,
+        name: 'Amit',
+        joining_date: "01-06-2021",
+        salary: 50000
+    },
+    {
+        id: 102,
+        name: 'Piyush',
+        joining_date: "01-01-2019",
+        salary: 30000
+    },
+    {
+        id: 103,
+        name: 'Meet',
+        joining_date: "01-03-2020",
+        salary: 25000
+    },
+    {
+        id: 104,
+        name: 'Lalit',
+        joining_date: "01-12-2021",
+        salary: 30000
+    }
+]
+
