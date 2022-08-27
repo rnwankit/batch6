@@ -40,7 +40,7 @@ export const addDoctor = (data) => async (dispatch) => {
                         aptprice: data.aptprice,
                         degree: data.degree,
                         description: data.description,
-                        url: url,
+                        file: url,
                         fileId: fileId
                     }
                     const docRef = await addDoc(collection(db, "doctors"), addData);
@@ -73,49 +73,57 @@ export const deleteDoctors = (data) => async (dispatch) => {
     }
 }
 
-export const updateDoctors = (data) => async (dispatch) => {
+export const updateDoctors = (data) => async (dispatch, getState) => {
     try {
-        const fileId = (Math.floor(Math.random() * 1000000) + 1).toString();
         const doctorRef = doc(db, "doctors", data.did);
-        const doctorsRefImgDel = ref(storage, 'doctors/' + data.fileId);
-        const doctorsRefImgIns = ref(storage, 'doctors/' + fileId);
 
-        // let { store } = configureStore();
+        if (typeof data.file === 'string') {
+            let uData = {
+                name: data.name,
+                aptprice: data.aptprice,
+                degree: data.degree,
+                description: data.description,
+                fileId: data.fileId,
+                file: data.file,
+            }
+            await updateDoc(doctorRef, uData)
+                .then(() => {
+                    console.log("Updated", uData);
+                    dispatch({ type: ActionTypes.UPDATE_DOCTORS, payload: { did: data.did, ...uData } })
+                })
+        } else {
+            const fileId = (Math.floor(Math.random() * 1000000) + 1).toString();
+            
+            const doctorsRefImgDel = ref(storage, 'doctors/' + data.fileId);
+            const doctorsRefImgIns = ref(storage, 'doctors/' + fileId);
 
-        // // if (store.getState().doctors.doctors.fileId !== data.fileId) {
+            await deleteObject(doctorsRefImgDel).then(async () => {
+                await uploadBytes(doctorsRefImgIns, data.file).then(async (snapshot) => {
+                    await getDownloadURL(snapshot.ref)
+                        .then(async (url) => {
+                            let uData = {
+                                name: data.name,
+                                aptprice: data.aptprice,
+                                degree: data.degree,
+                                description: data.description,
+                                fileId: fileId,
+                                file: url,
+                            }
 
-        // // }
-
-        //console.log(store.getState().doctors, data.fileId);
-
-        await deleteObject(doctorsRefImgDel).then(async () => {
-            await uploadBytes(doctorsRefImgIns, data.file).then(async (snapshot) => {
-                await getDownloadURL(snapshot.ref)
-                    .then(async (url) => {
-                        let uData = {
-                            name: data.name,
-                            aptprice: data.aptprice,
-                            degree: data.degree,
-                            description: data.description,
-                            fileId: fileId,
-                            url: url,
-                        }
-    
-                        await updateDoc(doctorRef, uData)
-                            .then(() => {
-                                console.log("Updated", uData);
-                                dispatch({ type: ActionTypes.UPDATE_DOCTORS, payload: {did: data.did, ...uData} })
-                            })  
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    })
-            })
-        }).catch((error) => {
-            console.log(error);
-        });
-
-
+                            await updateDoc(doctorRef, uData)
+                                .then(() => {
+                                    console.log("Updated", uData);
+                                    dispatch({ type: ActionTypes.UPDATE_DOCTORS, payload: { did: data.did, ...uData } })
+                                })
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        })
+                })
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
     } catch (error) {
         dispatch(errorDoctors(error.message));
     }

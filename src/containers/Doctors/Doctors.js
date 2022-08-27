@@ -74,7 +74,7 @@ function Doctors(props) {
             aptprice: '',
             degree: '',
             description: '',
-            file: update ? update.fileId : ''
+            file: ''
         },
         validationSchema: schema,
         onSubmit: values => {
@@ -99,7 +99,7 @@ function Doctors(props) {
 
         setUpdate(params.row);
 
-        formikObj.setValues({...params.row, file: params.row.fileId})
+        formikObj.setValues(params.row)
 
         console.log(params, formikObj.values);
     }
@@ -110,9 +110,9 @@ function Doctors(props) {
         { field: 'degree', headerName: 'Degree', width: 130 },
         { field: 'description', headerName: 'Description', width: 130 },
         {
-            filed: 'url', headerName: 'Image',
+            filed: 'file', headerName: 'Image',
             renderCell: (params) => (
-                <img src={params.row.url} width={50} height={50} />
+                <img src={params.row.file} width={50} height={50} />
             )
         },
         {
