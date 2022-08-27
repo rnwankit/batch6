@@ -74,7 +74,7 @@ function Doctors(props) {
             aptprice: '',
             degree: '',
             description: '',
-            file: ''
+            file: update ? update.fileId : ''
         },
         validationSchema: schema,
         onSubmit: values => {
@@ -97,9 +97,11 @@ function Doctors(props) {
     const handleEdit = (params) => {
         handleClickOpen();
 
-        setUpdate(true);
+        setUpdate(params.row);
 
-        formikObj.setValues(params.row)
+        formikObj.setValues({...params.row, file: params.row.fileId})
+
+        console.log(params, formikObj.values);
     }
 
     const columns = [
@@ -119,7 +121,7 @@ function Doctors(props) {
             width: 130,
             renderCell: (params) => (
                 <>
-                    <IconButton aria-label="delete" onClick={() => { handleDClickOpen(); setDid(params.row.did) }}>
+                    <IconButton aria-label="delete" onClick={() => { handleDClickOpen(); setDid(params.row) }}>
                         <DeleteIcon />
                     </IconButton>
                     <IconButton aria-label="edit" onClick={() => handleEdit(params)}>
