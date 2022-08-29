@@ -44,20 +44,14 @@ function Doctors(props) {
 
     let schema = yup.object().shape({
         name: yup.string().required("Please enter name"),
-        aptaptprice: yup.number().required("Please enter name").positive().integer(),
+        aptprice: yup.number().required("Please enter name").positive().integer(),
         degree: yup.string().required("Please enter degree"),
-        description: yup.string().required("Please enter description")
+        description: yup.string().required("Please enter description"),
+        file: yup.mixed().required("Please select file.")
     });
 
     const handleInsert = (values) => {
-        let id = Math.floor(Math.random() * 1000);
-
-        let data = {
-            id: id,
-            ...values
-        }
-
-        dispatch(addDoctor(data))
+        dispatch(addDoctor(values))
 
         // const localData = JSON.parse(localStorage.getItem("doctors"));
 
@@ -99,7 +93,8 @@ function Doctors(props) {
             name: '',
             aptprice: '',
             degree: '',
-            description: ''
+            description: '',
+            file: ''
         },
         validationSchema: schema,
         onSubmit: values => {
@@ -170,9 +165,9 @@ function Doctors(props) {
         },
         [])
 
-    const { handleBlur, handleChange, handleSubmit, errors, touched, values } = formikObj
+    const { handleBlur, handleChange, handleSubmit, errors, touched, values, setFieldValue } = formikObj
 
-    console.log(data);
+    console.log(errors);
 
     const handleSearch = (val) => {
 
@@ -303,7 +298,14 @@ function Doctors(props) {
                                                 onBlur={handleBlur}
                                             />
                                             {errors.description && touched.description ? <p>{errors.description}</p> : ''}
-
+                                            <input
+                                                type="file"
+                                                name="file"
+                                                id="file"
+                                                onChange={(event) => setFieldValue("file", event.target.files[0])}
+                                                onBlur={handleBlur}
+                                            />
+                                            {errors.file && touched.file ? <p>{errors.file}</p> : ''}
                                             <DialogActions>
                                                 <Button onClick={handleClose}>Cancel</Button>
                                                 {
